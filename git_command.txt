@@ -1,0 +1,105 @@
+﻿0. git配置
+    1）ssh-keygen
+	2）cat ~/.ssh/id_rsa.pub   （打开文件，复制内容）
+	3）ssh gerrit@192.168.11.104
+	4）vim .ssh/authorized_keys  （将复制内容添加到最后）
+	5）保存退出 (:wq)
+	6）exit
+1. 初始化一个Git仓库
+    git init
+2. 添加文件到Git仓库，分两步：
+    git add <file>
+    git commit -m "说明"
+3. 查看当前仓库的状态
+    git status
+4. 查看修改的内容
+    git diff <文件>
+5. HEAD指向的版本就是当前版本，切换版本使用命令
+    git reset --hard commit_id
+6. 查看提交历史
+    git log
+7. 查看命令历史
+    git reflog
+8. 查看工作区和版本库里面最新版本的区别
+    git diff HEAD -- readme.txt
+9. 丢弃工作区的修改
+    git checkout -- file
+10.丢弃暂存区的修改
+    1）把暂存区的修改撤销掉重新回到工作区
+	git reset HEAD file
+	2）丢弃工作区的修改
+	git checkout -- file
+11.删除一个文件
+    git rm
+	
+12.关联一个远程库
+    git remote add origin git@server-name:path/repo-name.git
+	例如：git remote add origin git@github.com:zhongguobaiyangyihao/Kyle_Sprocomm.git
+13.推送maser分支的所有内容到远程
+    1）第一次推送
+	git push -u origin master   //加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+	2）以后推送
+	git push origin master
+14.从远程库克隆
+    git clone git@server-name:path/repo-name.git
+	例如：git clone git@github.com:zhongguobaiyangyihao/Kyle_Sprocomm.git
+15.分支的创建和删除
+    1）列出本地已经存在的分支，并且在当前分支的前面加“*”号标记
+	git branch
+	2）创建分支
+	git branch <name>
+	3）切换分支
+	git checkout <name>
+	4）创建+切换分支
+	git checkout -b <name>
+	5）合并某分支到当前分支
+	git merge <name>
+	注：这种模式为Fast forward模式，该种模式下删除分支后会丢掉分支信息。
+	git merge --no-ff -m "merge with no-ff" <name>
+	注：这种模式为普通模式，该种模式合并后历史有分支，能看出来曾经做过合并，而fast forward合并就看不出来曾经做过合并。
+	6）删除本地分支
+	git branch -d <name>
+	注：合并完成后，删除分支没有问题。如果尚未完成合并就删除分支会提示还没有被合并，删除失败。此时使用
+	git branch -D <name>
+	强行删除.
+	7）列出远程分支
+	git branch -r
+	8) 列出本地分支和远程分支
+	git branch -a
+	9) 删除远程分支
+	git branch -d -r <name>
+	注：这个只是删除本地的索引，而不是真正删除远程分支的内容，要想真正删除远程分支上的内容，可以这样：
+	git push origin :remote_branch
+	注：冒号前面的空格不能少，相当于把一个空分支push到server上，等于删除该分支。
+	10)分支重命名
+	git branch -m oldbranchname newbranchname
+	11）推送本地分支到远程分支
+	git push origin local_branch:remote_branch
+	注：如果remote_branch不存在则会自动创建分支；用git branch localbranch，git push origin remotebranch两步，localbranch和remotebranch名字必须相同。
+	12）切换到远程的dev分支，在本地起名为dev分支，并切换到本地的dev分支
+	git checkout -b dev origin/dev
+16.工作现场保存和恢复
+    1）保存工作现场
+	git stash
+	2）查看现场保存内容
+	git stash list
+	3）恢复工作现场：
+	一是用git stash apply恢复，但是恢复后，stash内容并不删除，你需要用git stash drop来删除；
+	另一种方式是用git stash pop，恢复的同时把stash内容也删了。
+	4）恢复指定的stash
+	git stash apply stash@{0}
+17.多人协作工作模式
+    1）查看远程库信息
+	git remote -v
+	2）在本地创建和远程分支对应的分支
+	git checkout -b branch-name origin/branch-name
+	注：本地和远程分支的名称最好一致。
+	3）建立本地分支和远程分支的关联
+	git branch --set-upstream branch-name origin/branch-name
+	4）从本地推送分支
+	git push origin branch-name
+	5）推送失败，抓取远程的新提交
+	git pull
+18.列出远程分支详细信息，在每一个名字后面列出其远程url
+    git remote -v | --verbose 
+19.git merge --no-ff -m"把HL200B-WANG分支merge到HL200B分支上" HL200B-WANG
